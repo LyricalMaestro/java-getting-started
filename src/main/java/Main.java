@@ -21,7 +21,7 @@ public class Main extends HttpServlet {
 
   private void showHome(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
-    resp.getWriter().print("Hello from Java!");
+    resp.getWriter().print("Hello from Java!\r\nIaaaaa!!!");
   }
 
   private void showDatabase(HttpServletRequest req, HttpServletResponse resp)
@@ -42,6 +42,7 @@ public class Main extends HttpServlet {
 
       resp.getWriter().print(out);
     } catch (Exception e) {
+    	e.printStackTrace();
       resp.getWriter().print("There was an error: " + e.getMessage());
     } finally {
       if (connection != null) try{connection.close();} catch(SQLException e){}
@@ -52,7 +53,10 @@ public class Main extends HttpServlet {
     URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
     String username = dbUri.getUserInfo().split(":")[0];
-    String password = dbUri.getUserInfo().split(":")[1];
+    String password = "";
+    if(dbUri.getUserInfo().split(":").length > 1){
+        password = dbUri.getUserInfo().split(":")[1];
+    }
     int port = dbUri.getPort();
 
     String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
